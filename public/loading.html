@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>번개장터</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes colorChange {
+            from { background-color: #ef0e0e; }
+            to { background-color: #000; }
+        }
+
+        @keyframes loadingDots {
+            0% { content: "로딩 중"; }
+            33% { content: "로딩 중."; }
+            66% { content: "로딩 중.."; }
+            100% { content: "로딩 중..."; }
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: scale(1.2) translateX(-40px);
+        }
+
+        .lightning-icon {
+            width: 60px;
+            height: 75px;
+            background-color: #ef0e0e;
+            clip-path: polygon(
+                68% 0%,
+                65% 44%,
+                100% 44%,
+                32% 100%,
+                35% 56%,
+                0% 56%
+            );
+            margin-right: 8px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* 添加新的颜色过渡样式 */
+        .lightning-icon.color-transition {
+            animation: none;  /* 清除之前的动画 */
+            opacity: 1;
+            transition: background-color 1s ease;
+            background-color: #000;
+        }
+
+        .logo-text {
+            font-size: 60px;
+            font-weight: 900;
+            color: #000;
+            letter-spacing: -4px;
+        }
+
+        .button {
+            position: fixed;
+            bottom: 40px;
+            background-color: #ef0e0e;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            width: 240px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .button-icon {
+            width: 16px;
+            height: 20px;
+            background-color: #fff;
+            clip-path: polygon(
+                68% 0%,
+                65% 44%,
+                100% 44%,
+                32% 100%,
+                35% 56%,
+                0% 56%
+            );
+            position: absolute;
+            left: 30px;
+        }
+
+        .loading-text {
+            display: inline-block;
+            width: 70px;  /* 固定宽度确保文字不会移动 */
+            text-align: left;
+            margin-left: 15px;  /* 添加左侧边距使文字向右移动 */
+        }
+
+        .loading-text::after {
+            content: "로딩 중";
+            animation: loadingDots 1.5s steps(1) infinite;
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo-group {
+                transform: scale(0.9) translateX(-30px);
+            }
+            
+            .button {
+                width: 80%;
+                max-width: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-group">
+        <div class="lightning-icon"></div>
+        <span class="logo-text">번개장터</span>
+    </div>
+    <button class="button">
+        <div class="button-icon"></div>
+        <span class="loading-text"></span>
+    </button>
+    <script>
+        // 等待4秒后开始颜色过渡（从3s改为4s）
+        setTimeout(() => {
+            document.querySelector('.lightning-icon').classList.add('color-transition');
+        }, 4000);
+    </script>
+</body>
+</html> 

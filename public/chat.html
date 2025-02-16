@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>채팅방</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/chat/style.css">
+</head>
+<body>
+    <!-- 加载页面 -->
+    <iframe id="loadingPage" src="/loading.html" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 9999; background: white; transition: opacity 0.3s ease;"></iframe>
+
+    <!-- 聊天界面包装器 -->
+    <div class="chat-wrapper">
+        <div class="quick-reply-section left">
+            <div class="quick-reply-header">
+                <button>추가</button>
+                <button>편집</button>
+            </div>
+            <div class="quick-reply-list left-replies"></div>
+        </div>
+        <div class="chat-page">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2 id="roomName">채팅방</h2>
+                    <div class="online-count" id="onlineCount">접속자 수: 0명</div>
+                </div>
+                <div class="chat-messages" id="messageContainer">
+                    <!-- 消息内容会由 JavaScript 动态添加 -->
+                </div>
+                <div class="chat-input">
+                    <div class="input-wrapper">
+                        <textarea id="messageInput" placeholder="메시지를 입력하세요."></textarea>
+                        <div class="input-actions">
+                            <button class="action-button" id="uploadImageBtn">
+                                <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path d="M12.897.55c.336 0 .643.187.799.484l1.057 2.035H18.1a.9.9 0 0 1 .9.9V18.1a.9.9 0 0 1-.9.9H1.9a.9.9 0 0 1-.9-.9V3.97a.9.9 0 0 1 .9-.9h3.347l1.058-2.036A.902.902 0 0 1 7.104.55h5.793zm-.546 1.8H7.65L6.592 4.385a.9.9 0 0 1-.8.484h-2.99V17.2H17.2V4.87h-2.993a.903.903 0 0 1-.8-.485L12.352 2.35zM10 6.595a4.03 4.03 0 0 1 4.025 4.026A4.03 4.03 0 0 1 10 14.646a4.03 4.03 0 0 1-4.025-4.025A4.03 4.03 0 0 1 10 6.595zm0 1.8a2.228 2.228 0 0 0-2.225 2.226c0 1.227.998 2.226 2.225 2.226a2.227 2.227 0 0 0 2.225-2.226A2.228 2.228 0 0 0 10 8.395z"/>
+                                </svg>
+                            </button>
+                            <button class="action-button" id="sendButton">
+                                <svg class="send-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M16.804 12.132a1.093 1.093 0 0 1-1.544.002l-2.17-2.162v6.696a1.093 1.093 0 1 1-2.183 0V9.974l-2.166 2.16A1.093 1.093 0 0 1 7.2 10.588l3.95-3.938c.111-.137.254-.247.423-.316.404-.17.874-.089 1.188.223l4.041 4.03c.427.426.428 1.117.003 1.545M20.49 3.51C15.808-1.17 8.192-1.17 3.51 3.51c-4.68 4.68-4.68 12.297 0 16.98A11.977 11.977 0 0 0 12 24c3.074 0 6.148-1.17 8.49-3.51 4.68-4.682 4.68-12.298 0-16.98" fill="#D80C18" fill-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*" style="display: none;">
+                </div>
+            </div>
+        </div>
+        <div class="quick-reply-section right">
+            <div class="quick-reply-header">
+                <button id="rightAddBtn">추가</button>
+                <button id="rightDeleteBtn">삭제</button>
+            </div>
+            <div class="quick-reply-list right-replies">
+                <div class="quick-reply-item" data-type="상품정보">
+                    <span class="reply-content">상품정보</span>
+                    <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加类型选择模态框 -->
+    <div id="typeSelectModal" class="modal">
+        <div class="modal-content">
+            <h3>유형 선택</h3>
+            <div class="type-select-list">
+                <div class="type-select-item" data-type="상품정보">
+                    <span>상품정보</span>
+                </div>
+                <div class="type-select-item" data-type="결제정보">
+                    <span>결제정보</span>
+                </div>
+                <div class="type-select-item" data-type="기타">
+                    <span>기타</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="confirmTypeSelect">확인</button>
+                <button id="cancelTypeSelect" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加项目名称编辑模态框 -->
+    <div id="itemNameModal" class="modal">
+        <div class="modal-content">
+            <h3>항목 이름 입력</h3>
+            <div class="form-group">
+                <input type="text" id="itemNameInput" placeholder="항목 이름을 입력하세요" value="상품정보">
+            </div>
+            <div class="modal-buttons">
+                <button id="saveItemName">확인</button>
+                <button id="cancelItemName" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片预览模态框 -->
+    <div class="image-modal" id="imageModal">
+        <img id="modalImage" src="" alt="이미지 미리보기">
+    </div>
+
+    <!-- 快捷回复添加模态框 -->
+    <div id="addQuickReplyModal" class="modal">
+        <div class="modal-content">
+            <h3>빠른 답장 추가</h3>
+            <textarea id="quickReplyContent" placeholder="빠른 답장 내용을 입력하세요"></textarea>
+            <div class="modal-buttons">
+                <button id="saveQuickReply">저장</button>
+                <button id="cancelQuickReply" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快捷回复编辑模态框 -->
+    <div id="editQuickReplyModal" class="modal">
+        <div class="modal-content edit-modal">
+            <h3>빠른 답장 편집</h3>
+            <textarea id="editQuickReplyContent" placeholder="수정할 내용을 입력하세요"></textarea>
+            <div class="modal-buttons">
+                <button id="updateQuickReply">저장</button>
+                <button id="cancelEditQuickReply" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 商品信息编辑模态框 -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content edit-modal">
+            <h3>상품정보 편집</h3>
+            <div class="product-edit-form">
+                <div class="form-group">
+                    <label>상품 이미지</label>
+                    <div class="image-preview-container">
+                        <img id="productImagePreview" src="" alt="상품 이미지">
+                        <button id="changeProductImage" class="change-image-btn">이미지 선택</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>상품명</label>
+                    <input type="text" id="productName" placeholder="상품명을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label>소제목 1</label>
+                    <input type="text" id="subtitle1" placeholder="소제목 1을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label>소제목 2</label>
+                    <input type="text" id="subtitle2" placeholder="소제목 2를 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label>소제목 3</label>
+                    <input type="text" id="subtitle3" placeholder="소제목 3을 입력하세요">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="saveProductInfo">확인</button>
+                <button id="cancelProductEdit" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付信息编辑模态框 -->
+    <div id="editPaymentModal" class="modal">
+        <div class="modal-content">
+            <h2>결제정보 편집</h2>
+            <form class="payment-edit-form">
+                <div class="form-group">
+                    <label for="paymentName">결제명</label>
+                    <input type="text" id="paymentName" placeholder="결제명을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label for="paymentAmount">결제금액</label>
+                    <input type="text" id="paymentAmount" placeholder="결제금액을 입력하세요">
+                </div>
+                <div class="form-group">
+                    <label>결제 이미지</label>
+                    <div class="image-preview-container">
+                        <img id="paymentImagePreview" src="" alt="결제 이미지 미리보기" style="display: none;">
+                        <button type="button" id="changePaymentImageBtn" class="change-image-btn">이미지 변경</button>
+                    </div>
+                    <input type="file" id="paymentImageInput" accept="image/*" style="display: none;">
+                </div>
+            </form>
+            <div class="modal-buttons">
+                <button type="button" id="cancelPaymentEdit">취소</button>
+                <button type="button" id="savePaymentInfoBtn">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 申请模态框 -->
+    <div id="applicationModal" class="modal">
+        <div class="modal-content application-modal">
+            <div class="application-content">
+                <button class="close-button" id="closeApplicationModal"></button>
+                <h2>신청서</h2>
+                <!-- 添加横线 -->
+                <div class="horizontal-line line-1"></div>
+                <div class="horizontal-line line-4"></div>
+                <div class="completion-button">
+                    <button id="completeApplication">완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+    <script>
+        // 合并 resize 相关的函数
+        function updateViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            document.body.style.height = window.innerHeight + "px";
+        }
+
+        window.addEventListener('resize', updateViewportHeight);
+        window.addEventListener('orientationchange', updateViewportHeight);
+        updateViewportHeight();
+
+        // 防止移动端橡皮筋效果
+        document.body.addEventListener('touchmove', function(e) {
+            if (!e.target.closest('.chat-messages')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html> 
