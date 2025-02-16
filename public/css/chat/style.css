@@ -1595,6 +1595,8 @@ body.admin-mode .chat-header .online-count {
     z-index: 1000;
     justify-content: center;
     align-items: center;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 .policy-modal.active {
@@ -1614,6 +1616,8 @@ body.admin-mode .chat-header .online-count {
     background: white;
     position: relative;
     overflow: hidden;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
 }
 
 .policy-modal .modal-header {
@@ -1667,6 +1671,8 @@ body.admin-mode .chat-header .online-count {
     letter-spacing: -0.3px;
     position: relative;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
 }
 
 .policy-modal .title {
@@ -1721,7 +1727,7 @@ body.admin-mode .chat-header .online-count {
     font-weight: 500;
 }
 
-/* 添加滚动条样式 */
+/* 优化滚动条样式 */
 .policy-modal .modal-body::-webkit-scrollbar {
     width: 4px;
 }
@@ -1754,9 +1760,24 @@ body.admin-mode .chat-header .online-count {
 @media screen and (max-width: 511px) {
     .policy-modal .modal-content {
         border-radius: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
     
     .policy-modal .modal-body {
+        flex: 1;
         padding: 20px 20px max(20px, env(safe-area-inset-bottom)) 20px;
+    }
+
+    .policy-modal .modal-header {
+        padding-top: max(20px, env(safe-area-inset-top));
+    }
+}
+
+/* iOS 设备适配 */
+@supports (-webkit-touch-callout: none) {
+    .policy-modal .modal-content {
+        height: -webkit-fill-available;
     }
 }
