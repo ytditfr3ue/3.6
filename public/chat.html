@@ -226,12 +226,77 @@
         window.addEventListener('orientationchange', updateViewportHeight);
         updateViewportHeight();
 
-        // 防止移动端橡皮筋效果
+        // 防止移动端橡皮筋效果，但允许特定区域的滑动
         document.body.addEventListener('touchmove', function(e) {
-            if (!e.target.closest('.chat-messages')) {
+            if (!e.target.closest('.chat-messages') && 
+                !e.target.closest('.bottom-sheet-content') && 
+                !e.target.closest('.modal-body')) {
                 e.preventDefault();
             }
         }, { passive: false });
+
+        // 处理底部模态框的触摸事件
+        document.addEventListener('click', function(e) {
+            const bottomSheet = e.target.closest('.bottom-sheet-modal');
+            const overlay = e.target.closest('.bottom-sheet-overlay');
+            
+            if (overlay && !bottomSheet) {
+                closeBottomSheet();
+            }
+        });
     </script>
+    
+    <!-- 保证金政策模态框 -->
+    <div class="policy-modal" id="policyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-button" onclick="closePolicyModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="title">[보증금 정책 안내] 안전인증 필수 및 거래 보호 조치</div>
+                
+                <div class="section">
+                    <div class="subtitle">보증금 및 안전인증 정책 시행 안내</div>
+                    <div class="text highlight">최근 보이스피싱, 사기 거래, 불법 자금 세탁 등의 피해 사례가 증가함에 따라 모든 판매자는 반드시 안전인증을 완료해야 합니다.</div>
+                    <div class="text">안전인증을 진행하지 않으면 거래 제한 및 계정 이용 제한이 적용될 수 있습니다.</div>
+                </div>
+
+                <div class="section">
+                    <div class="subtitle">보증금 신청 및 관리 방법</div>
+                    <div class="text highlight">[보증금 신청 및 심사 절차]</div>
+                    <div class="text">• 판매자는 안전인증을 신청하고 번개장터의 심사를 통과해야 거래 진행이 가능합니다.</div>
+                    <div class="text">• 신청한 보증금은 계정 내 잔액으로 예치되며, 심사가 완료될 때까지 동결됩니다.</div>
+                    <div class="text">• 심사를 통과하면 정상적으로 거래를 진행할 수 있습니다.</div>
+                </div>
+
+                <div class="section">
+                    <div class="text highlight">[보증금 환불 및 수수료 안내]</div>
+                    <div class="text">• 거래를 진행하지 않거나 번개장터를 이용하지 않을 경우, 신청한 보증금은 전액 출금 가능합니다.</div>
+                    <div class="text">• 출금 시 별도의 수수료는 부과되지 않습니다.</div>
+                    <div class="text highlight">• 단, 안전인증 심사 신청 시 1%의 수수료가 발생할 수 있습니다.</div>
+                </div>
+
+                <div class="section">
+                    <div class="subtitle">거래 보호 및 사기 방지 시스템</div>
+                    <div class="text">안전인증을 완료한 판매자는 보다 안전하게 거래할 수 있으며, 구매자의 악의적인 반품 사기 및 피해 발생 시 번개장터가 직접 조사하여 조치를 취합니다.</div>
+                    <div class="text highlight">분쟁 발생 시 원만한 합의가 이루어지지 않는 경우, 해당 금액에 대한 배상 절차가 진행될 수 있습니다.</div>
+                </div>
+
+                <div class="section">
+                    <div class="subtitle">보증금 동결 및 계정 제한 안내</div>
+                    <div class="text highlight">번개장터 안전거래 규정을 위반할 경우, 보증금이 즉시 동결되며 해당 금액의 출금이 제한됩니다.</div>
+                    <div class="text">이와 관련된 문의는 번개장터 고객센터를 통해 접수해 주시기 바랍니다.</div>
+                </div>
+
+                <div class="text">번개장터는 안전한 거래 환경을 위해 지속적으로 노력하고 있습니다.</div>
+                <div class="text">안전인증 및 보증금 정책을 확인하시고, 원활한 거래를 진행해 주세요.</div>
+
+                <div class="footer">
+                    <div class="text">감사합니다.</div>
+                    <div class="text">번개장터 고객센터</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 

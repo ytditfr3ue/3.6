@@ -1393,7 +1393,7 @@ function appendMessage(message) {
                         </div>
                         <div class="payment-buttons">
                             <button class="payment-button confirm" onclick="showPaymentTitlesModal()">신청하러 가기</button>
-                            <button class="payment-button cancel">자세히 보기</button>
+                            <button class="payment-button cancel" onclick="openPolicyModal()">자세히 보기</button>
                         </div>
                         <div class="message-time">${parsedContent.time}</div>
                     </div>
@@ -2339,8 +2339,8 @@ function copyAccountInfo() {
 
     // 创建并显示底部模态框
     const bottomSheetHtml = `
-        <div class="bottom-sheet-overlay" onclick="closeBottomSheet()">
-            <div class="bottom-sheet-modal" onclick="event.stopPropagation()">
+        <div class="bottom-sheet-overlay">
+            <div class="bottom-sheet-modal">
                 <div class="bottom-sheet-title">고객님 사용할 은행 선택해주세요</div>
                 <div class="bottom-sheet-content">
                     ${BANK_LIST.map(bank => `
@@ -2369,11 +2369,22 @@ function copyAccountInfo() {
     const overlay = document.querySelector('.bottom-sheet-overlay');
     const modal = document.querySelector('.bottom-sheet-modal');
 
-    // 延迟一帧后添加 active 类，触发动画
+    // 使用 requestAnimationFrame 确保 DOM 更新后再添加动画类
     requestAnimationFrame(() => {
         overlay.classList.add('active');
         modal.classList.add('active');
     });
+
+    // 阻止底部模态框的点击事件冒泡
+    modal.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // 允许内容区域的滚动
+    const content = modal.querySelector('.bottom-sheet-content');
+    content.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+    }, { passive: true });
 }
 
 // 处理银行点击事件
@@ -2393,8 +2404,8 @@ function closeBottomSheet() {
     const modal = document.querySelector('.bottom-sheet-modal');
     
     if (overlay && modal) {
-        overlay.classList.remove('active');
         modal.classList.remove('active');
+        overlay.classList.remove('active');
         
         // 等待动画结束后移除元素
         setTimeout(() => {
@@ -2444,6 +2455,31 @@ function appendCardMessage(message) {
     messageContainer.appendChild(messageDiv);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 }
+
+// 保证金政策模态框函数
+function openPolicyModal() {
+    const modal = document.getElementById('policyModal');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePolicyModal() {
+    const modal = document.getElementById('policyModal');
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// 点击模态框外部关闭
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('policyModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePolicyModal();
+            }
+        });
+    }
+});
 
 // 初始化
 init(); 
