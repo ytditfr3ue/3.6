@@ -1130,7 +1130,7 @@ body.admin-mode .chat-header .online-count {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 20px 20px 20px;
+    padding: 20px 20px 0;
     position: relative;
     height: 100%;
 }
@@ -1169,8 +1169,8 @@ body.admin-mode .chat-header .online-count {
 }
 
 #paymentTitlesModal .payment-actions {
-    width: 80%;
-    margin: auto;
+    width: 90%;
+    margin: 20px auto 0;
     padding: 0 0 32px;
     display: flex;
     justify-content: space-between;
@@ -1221,12 +1221,13 @@ body.admin-mode .chat-header .online-count {
     
     #paymentTitlesModal .payment-table,
     #paymentTitlesModal .payment-actions {
-        width: 90%;
+        width: 95%;
     }
     
     #paymentTitlesModal .payment-actions {
         padding: 0 0 max(24px, env(safe-area-inset-bottom));
         gap: 12px;
+        margin: 16px auto 0;
     }
 }
 
@@ -1240,10 +1241,11 @@ body.admin-mode .chat-header .online-count {
     
     #paymentTitlesModal .payment-table,
     #paymentTitlesModal .payment-actions {
-        width: 80%;
+        width: 90%;
     }
     
     #paymentTitlesModal .payment-actions {
+        margin: 20px auto 0;
         padding: 0 0 32px;
         gap: 16px;
     }
@@ -1373,7 +1375,7 @@ body.admin-mode .chat-header .online-count {
     }
     
     .bottom-sheet-title {
-        padding-top: max(24px, calc(24px + env(safe-area-inset-top, 0px)));
+        padding-top: max(24px, calc(24px + env(safe-area-inset-top)));
     }
     
     .bottom-sheet-button {
@@ -1421,8 +1423,8 @@ body.admin-mode .chat-header .online-count {
 }
 
 #paymentTitlesModal .payment-table {
-    width: 80%;
-    margin: 0 auto 40px;
+    width: 90%;
+    margin: 0 auto;
     border: 2px solid #EEEEEE;
     border-radius: 12px;
     background: #ffffff;
@@ -1433,8 +1435,9 @@ body.admin-mode .chat-header .online-count {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: min(16px, calc(16 * 100vh / 896)) min(20px, calc(20 * 100vw / 414));
+    padding: 16px 20px;
     position: relative;
+    min-height: 54px;
 }
 
 #paymentTitlesModal .table-row:nth-child(3)::after {
@@ -1449,23 +1452,24 @@ body.admin-mode .chat-header .online-count {
 
 #paymentTitlesModal .table-label {
     color: #666666;
-    font-size: min(14px, calc(14 * 100vh / 896));
+    font-size: 14px;
     font-weight: 400;
+    flex-shrink: 0;
+    margin-right: 10px;
 }
 
 #paymentTitlesModal .table-value {
     color: #000000;
-    font-size: min(14px, calc(14 * 100vh / 896));
+    font-size: 14px;
     font-weight: 500;
-}
-
-#paymentTitlesModal .table-row.amount {
-    background-color: transparent;
+    word-break: break-all;
+    max-width: 65%;
+    text-align: right;
 }
 
 #paymentTitlesModal .table-row.amount .table-value {
     color: #d80c18;
-    font-size: min(16px, calc(16 * 100vh / 896));
+    font-size: 16px;
     font-weight: 700;
 }
 
